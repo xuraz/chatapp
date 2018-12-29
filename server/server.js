@@ -14,24 +14,23 @@ app.use(express.static(path.join(__dirname, "../public")));
 io.on("connection", socket => {
   console.log("New user connected");
 
-  socket.emit("newEmail", {
-    from: "asuraj893@gmail.com",
-    text: "Hello socket.io",
-    createAt: 14 / 09 / 2075
-  });
-
+  /*
   socket.emit("newMessage", {
     from: "Asmita Lamichane",
     text: "Your first message using socket.io",
     createdAt: 14 / 09 / 2075
-  });
+  });*/
 
-  socket.on("createEmail", newEmail => {
-    console.log("Create New Email", newEmail);
-  });
-
-  socket.on("createMessage", newMessage => {
-    console.log("Create New Message", newMessage);
+  //Emit newMessage on createMessage
+  socket.on("createMessage", message => {
+    //Event listener,cb ie. msg as params
+    //console.log("Create New Message", newMessage);
+    io.emit("newMessage", {
+      //io.emit emits eventL to multiple connection
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    });
   });
 
   //Disconnect
