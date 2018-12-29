@@ -21,6 +21,19 @@ io.on("connection", socket => {
     createdAt: 14 / 09 / 2075
   });*/
 
+  socket.emit("newMessage", {
+    from: "Admin",
+    text: "Welcome to chat app",
+    createdAt: new Date().getTime()
+  });
+
+  //Not the one but everyone else <3.
+  socket.broadcast.emit("newMessage", {
+    from: "Admin",
+    text: "New user joined",
+    createdAt: new Date().getTime()
+  });
+
   //Emit newMessage on createMessage
   socket.on("createMessage", message => {
     //Event listener,cb ie. msg as params
@@ -31,6 +44,13 @@ io.on("connection", socket => {
       text: message.text,
       createdAt: new Date().getTime()
     });
+    /*
+    //Not the one but everyone else <3.
+    socket.broadcast.emit("newMessage", {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    });*/
   });
 
   //Disconnect
