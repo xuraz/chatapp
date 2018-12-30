@@ -9,6 +9,8 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
+const { generateMessage } = require("./utils/message");
+
 app.use(express.static(path.join(__dirname, "../public")));
 //Connection
 io.on("connection", socket => {
@@ -21,29 +23,28 @@ io.on("connection", socket => {
     createdAt: 14 / 09 / 2075
   });*/
 
-  socket.emit("newMessage", {
-    from: "Admin",
-    text: "Welcome to chat app",
-    createdAt: new Date().getTime()
-  });
+  socket.emit("newMessage", generateMessage("Admin", "Welcome to chat app"));
 
   //Not the one but everyone else <3.
-  socket.broadcast.emit("newMessage", {
-    from: "Admin",
-    text: "New user joined",
-    createdAt: new Date().getTime()
-  });
+  socket.broadcast.emit(
+    "newMessage",
+    generateMessage("Admin", "New user joined")
+  );
 
   //Emit newMessage on createMessage
   socket.on("createMessage", message => {
     //Event listener,cb ie. msg as params
     //console.log("Create New Message", newMessage);
-    io.emit("newMessage", {
+    io.emit(
+      "newMessage",
+      generateMessage(message.from, message.text)
+      /*{
       //io.emit emits eventL to multiple connection
       from: message.from,
       text: message.text,
       createdAt: new Date().getTime()
-    });
+    }*/
+    );
     /*
     //Not the one but everyone else <3.
     socket.broadcast.emit("newMessage", {
