@@ -32,19 +32,18 @@ io.on("connection", socket => {
   );
 
   //Emit newMessage on createMessage
-  socket.on("createMessage", message => {
+  socket.on("createMessage", (message, callback) => {
     //Event listener,cb ie. msg as params
     //console.log("Create New Message", newMessage);
-    io.emit(
-      "newMessage",
-      generateMessage(message.from, message.text)
-      /*{
+    io.emit("newMessage", generateMessage(message.from, message.text));
+    callback("This is from the Server"); //acknowledge we got req from client
+    /*{
       //io.emit emits eventL to multiple connection
       from: message.from,
       text: message.text,
       createdAt: new Date().getTime()
     }*/
-    );
+
     /*
     //Not the one but everyone else <3.
     socket.broadcast.emit("newMessage", {
